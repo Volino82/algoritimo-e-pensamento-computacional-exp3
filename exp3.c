@@ -1,3 +1,11 @@
+
+#include <stdio.h>
+
+#ifdef _WIN32
+#include <windows.h>
+#endif
+
+
 // Definição das constantes do cenário de Maricá - RJ 
 #define DIAS 7 // Período de monitoramento (7 dias) 
 #define BAIRROS 4 // Cordeirinho, Ponta Negra, Guaratiba e Barra de Maricá 
@@ -17,16 +25,20 @@ char obter_simbolo_heatmap(int nivel)
 { 
     switch (nivel) 
     { 
-        case 0: return '.'; // Sem chuva 
-        case 1: return '-'; // Chuva fraca 
-        case 2: return '='; // Chuva moderada 
-        case 3: return '#'; // Chuva forte 
+        case 0: return '0'; // Sem chuva 
+        case 1: return '🌥️ '; // Chuva fraca 
+        case 2: return '🌦️ '; // Chuva moderada 
+        case 3: return '🌧️ '; // Chuva forte 
         default: return '?'; 
     } 
 } 
 
 int main() 
 { 
+    #ifdef _WIN32
+        // Configura o console do Windows para aceitar a codificação UTF-8 (Code Page 65001)
+        SetConsoleOutputCP(CP_UTF8);
+    #endif
     // 1. Mapeamento dos Bairros de Maricá (Matriz de Char) 
     char nomes_bairros[BAIRROS][TAM_NOME] = { "Cordeirinho", "Ponta Negra", "Guaratiba", "Barra de Marica" }; 
     // 2. Matriz Principal: volume de chuva acumulado (em mm) [DIAS][BAIRROS] 
@@ -103,7 +115,7 @@ int main()
     
     // Tabela 2: Heatmap Visual de Intensidade 
     printf("2. HEATMAP DE INTENSIDADE PLUVIOMETRICA:\n"); 
-    printf("Legenda: [ . ] Sem Chuva [ - ] Fraca (<10mm) [ = ] Moderada (<25mm) [ # ] Forte (>=25mm)\n\n"); 
+    printf("Legenda: [ 🌤️ ] Sem Chuva [ 🌥️ ] Fraca (<10mm) [ 🌦️ ] Moderada (<25mm) [ 🌧️ ] Forte (>=25mm)\n\n"); 
     printf("%-8s", "Dia"); 
     
     for (int b = 0; b < BAIRROS; b++) 
